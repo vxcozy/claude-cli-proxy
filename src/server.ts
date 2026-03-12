@@ -181,7 +181,7 @@ export function startServer(port: number): void {
 
     if (req.method === 'GET' && req.url === '/health') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ ok: true, proxy: 'warp-claude-proxy' }));
+      res.end(JSON.stringify({ ok: true, proxy: 'claude-cli-proxy' }));
       return;
     }
 
@@ -190,13 +190,13 @@ export function startServer(port: number): void {
   });
 
   server.listen(port, '127.0.0.1', () => {
-    console.log(`warp-claude-proxy  →  http://127.0.0.1:${port}`);
+    console.log(`claude-cli-proxy  →  http://127.0.0.1:${port}`);
     console.log(`Set ANTHROPIC_BASE_URL=http://127.0.0.1:${port} in your IDE`);
   });
 
   server.on('error', (err: NodeJS.ErrnoException) => {
     if (err.code === 'EADDRINUSE') {
-      console.error(`Port ${port} is already in use. Try a different port: warp-claude-proxy <port>`);
+      console.error(`Port ${port} is already in use. Try a different port: claude-cli-proxy <port>`);
     } else {
       console.error('Server error:', err.message);
     }

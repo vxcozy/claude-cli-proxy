@@ -1,6 +1,6 @@
-# warp-claude-proxy
+# claude-cli-proxy
 
-A local Anthropic-compatible API proxy that delegates to the `claude` CLI. Use your Claude Max subscription in Warp and other AI-aware IDEs without a separate API key.
+A local Anthropic-compatible API proxy that delegates to the `claude` CLI. Use your Claude Max subscription in any AI-aware IDE that supports custom API endpoints — no separate API key required.
 
 ## How it works
 
@@ -16,7 +16,7 @@ IDE  →  POST http://127.0.0.1:9099/v1/messages
                 IDE receives response
 ```
 
-The proxy never touches your OAuth token directly — it just delegates to the official `claude` CLI, which manages its own auth. All requests stay on `127.0.0.1`.
+The proxy never touches your OAuth token directly — it delegates to the official `claude` CLI, which manages its own auth. All requests stay on `127.0.0.1`.
 
 ## Requirements
 
@@ -26,16 +26,16 @@ The proxy never touches your OAuth token directly — it just delegates to the o
 ## Install
 
 ```bash
-npm install -g warp-claude-proxy
+npm install -g claude-cli-proxy
 # or run directly:
-npx warp-claude-proxy
+npx claude-cli-proxy
 ```
 
 Or from source:
 
 ```bash
-git clone https://github.com/you/warp-claude-proxy
-cd warp-claude-proxy
+git clone https://github.com/vxcozy/claude-cli-proxy
+cd claude-cli-proxy
 npm install
 npm run build
 npm start
@@ -45,21 +45,21 @@ npm start
 
 ```bash
 # Start on default port 9099
-warp-claude-proxy
+claude-cli-proxy
 
 # Start on a custom port
-warp-claude-proxy 3456
+claude-cli-proxy 3456
 ```
 
-## Configuring Warp
+## IDE configuration
 
-In Warp's AI settings, set a custom provider with:
+Point your IDE's custom Anthropic provider at the proxy:
 
 - **Base URL**: `http://127.0.0.1:9099`
 - **API key**: any non-empty string (the proxy ignores it)
 - **Model**: any Claude model name (e.g. `claude-opus-4-6`)
 
-> Check Warp's docs for the exact setting location — it may be under *Settings → AI → Custom provider* or similar.
+Works with any tool that supports `ANTHROPIC_BASE_URL` or a custom Anthropic endpoint — Continue.dev, Cursor, Zed, and others.
 
 ## Endpoints
 
@@ -72,10 +72,8 @@ In Warp's AI settings, set a custom provider with:
 
 The proxy passes this flag so the CLI never blocks waiting for a TTY permission prompt (there is no TTY — it's a background process). Claude's native tools (Bash, file read/write) remain available and are governed by your normal Claude Max permissions.
 
-If you want to disable Claude's built-in tools entirely (safer, just chat), set the `CLAUDE_NO_TOOLS` env var before starting:
+To disable Claude's built-in tools entirely (pure chat mode):
 
 ```bash
-CLAUDE_NO_TOOLS=1 warp-claude-proxy
+CLAUDE_NO_TOOLS=1 claude-cli-proxy
 ```
-
-This adds `--tools ""` to the CLI invocation.

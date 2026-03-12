@@ -1,10 +1,10 @@
 {
-  "name": "warp-claude-proxy",
+  "name": "claude-cli-proxy",
   "version": "0.1.0",
-  "description": "Local Anthropic-compatible API proxy that delegates to the Claude CLI — use your Claude Max subscription in Warp and other AI-aware IDEs",
+  "description": "Local Anthropic-compatible API proxy that delegates to the Claude CLI — use your Claude Max subscription in any AI-aware IDE",
   "type": "module",
   "bin": {
-    "warp-claude-proxy": "./dist/index.js"
+    "claude-cli-proxy": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",

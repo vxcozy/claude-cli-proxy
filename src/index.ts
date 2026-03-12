@@ -8,7 +8,7 @@ const port = arg ? parseInt(arg, 10) : DEFAULT_PORT;
 
 if (isNaN(port) || port < 1 || port > 65535) {
   console.error(`Invalid port: ${arg}`);
-  console.error('Usage: warp-claude-proxy [port]');
+  console.error('Usage: claude-cli-proxy [port]');
   process.exit(1);
 }
 
