@@ -27,3 +27,52 @@ export interface AnthropicErrorResponse {
     message: string;
   };
 }
+
+// ---------------------------------------------------------------------------
+// OpenAI-compatible types
+// ---------------------------------------------------------------------------
+
+export interface OpenAIMessage {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+}
+
+export interface OpenAIChatRequest {
+  model?: string;
+  messages: OpenAIMessage[];
+  stream?: boolean;
+  max_tokens?: number;
+  temperature?: number;
+}
+
+export interface OpenAIChatChoice {
+  index: number;
+  message: { role: 'assistant'; content: string };
+  finish_reason: 'stop' | 'length' | null;
+}
+
+export interface OpenAIChatResponse {
+  id: string;
+  object: 'chat.completion';
+  created: number;
+  model: string;
+  choices: OpenAIChatChoice[];
+  usage: { prompt_tokens: number; completion_tokens: number; total_tokens: number };
+}
+
+export interface OpenAIChatChunkDelta {
+  role?: 'assistant';
+  content?: string;
+}
+
+export interface OpenAIChatChunk {
+  id: string;
+  object: 'chat.completion.chunk';
+  created: number;
+  model: string;
+  choices: Array<{
+    index: number;
+    delta: OpenAIChatChunkDelta;
+    finish_reason: 'stop' | 'length' | null;
+  }>;
+}

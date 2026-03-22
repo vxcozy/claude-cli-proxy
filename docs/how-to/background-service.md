@@ -1,10 +1,10 @@
 # Run as a background service
 
-How to keep claude-cli-proxy running automatically.
+How to keep local-llm-proxy running automatically.
 
 ## macOS (launchd)
 
-Create `~/Library/LaunchAgents/com.claude-cli-proxy.plist`:
+Create `~/Library/LaunchAgents/com.local-llm-proxy.plist`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -12,11 +12,11 @@ Create `~/Library/LaunchAgents/com.claude-cli-proxy.plist`:
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.claude-cli-proxy</string>
+  <string>com.local-llm-proxy</string>
   <key>ProgramArguments</key>
   <array>
     <string>/usr/local/bin/node</string>
-    <string>/usr/local/lib/node_modules/claude-cli-proxy/dist/index.js</string>
+    <string>/usr/local/lib/node_modules/local-llm-proxy/dist/index.js</string>
   </array>
   <key>EnvironmentVariables</key>
   <dict>
@@ -28,9 +28,9 @@ Create `~/Library/LaunchAgents/com.claude-cli-proxy.plist`:
   <key>KeepAlive</key>
   <true/>
   <key>StandardOutPath</key>
-  <string>/tmp/claude-cli-proxy.out.log</string>
+  <string>/tmp/local-llm-proxy.out.log</string>
   <key>StandardErrorPath</key>
-  <string>/tmp/claude-cli-proxy.err.log</string>
+  <string>/tmp/local-llm-proxy.err.log</string>
 </dict>
 </plist>
 ```
@@ -38,7 +38,7 @@ Create `~/Library/LaunchAgents/com.claude-cli-proxy.plist`:
 Load it:
 
 ```bash
-launchctl load ~/Library/LaunchAgents/com.claude-cli-proxy.plist
+launchctl load ~/Library/LaunchAgents/com.local-llm-proxy.plist
 ```
 
 Adjust the `node` and `index.js` paths to match your installation. Find them with:
@@ -50,15 +50,15 @@ npm root -g
 
 ## Linux (systemd)
 
-Create `~/.config/systemd/user/claude-cli-proxy.service`:
+Create `~/.config/systemd/user/local-llm-proxy.service`:
 
 ```ini
 [Unit]
-Description=claude-cli-proxy
+Description=local-llm-proxy
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/node /usr/lib/node_modules/claude-cli-proxy/dist/index.js
+ExecStart=/usr/bin/node /usr/lib/node_modules/local-llm-proxy/dist/index.js
 Restart=on-failure
 Environment=PATH=/usr/local/bin:/usr/bin:/bin
 
@@ -69,8 +69,8 @@ WantedBy=default.target
 Enable and start:
 
 ```bash
-systemctl --user enable claude-cli-proxy
-systemctl --user start claude-cli-proxy
+systemctl --user enable local-llm-proxy
+systemctl --user start local-llm-proxy
 ```
 
 ## Checking status

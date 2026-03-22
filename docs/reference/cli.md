@@ -3,7 +3,7 @@
 ## Usage
 
 ```
-claude-cli-proxy [port]
+local-llm-proxy [port]
 ```
 
 | Argument | Default | Description |

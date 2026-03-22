@@ -1,17 +1,20 @@
-# claude-cli-proxy
+# local-llm-proxy
 
-A local Anthropic-compatible API proxy that delegates to the `claude` CLI. Use your Claude Max subscription in any AI-aware IDE that supports custom API endpoints — no separate API key required.
+A local API proxy that delegates to the `claude` CLI. Use your Claude Max subscription in any AI-aware IDE — no separate API key required.
+
+Speaks both **Anthropic** (`/v1/messages`) and **OpenAI** (`/v1/chat/completions`) formats, so it works with virtually any IDE or tool that supports custom AI providers.
 
 ## How it works
 
 ```
-IDE  →  POST http://127.0.0.1:9099/v1/messages
+IDE  →  POST http://127.0.0.1:9099/v1/chat/completions  (OpenAI format)
+   or   POST http://127.0.0.1:9099/v1/messages           (Anthropic format)
                      ↓
           parse messages[] + system prompt
                      ↓
      spawn: claude --print --dangerously-skip-permissions
                      ↓
-     stream stdout → Anthropic SSE events
+     stream stdout → SSE events (matching request format)
                      ↓
                 IDE receives response
 ```
@@ -26,16 +29,16 @@ The proxy never touches your OAuth token directly — it delegates to the offici
 ## Install
 
 ```bash
-npm install -g claude-cli-proxy
+npm install -g local-llm-proxy
 # or run directly:
-npx claude-cli-proxy
+npx local-llm-proxy
 ```
 
 Or from source:
 
 ```bash
-git clone https://github.com/vxcozy/claude-cli-proxy
-cd claude-cli-proxy
+git clone https://github.com/vxcozy/local-llm-proxy
+cd local-llm-proxy
 npm install
 npm run build
 npm start
@@ -45,28 +48,59 @@ npm start
 
 ```bash
 # Start on default port 9099
-claude-cli-proxy
+local-llm-proxy
 
 # Start on a custom port
-claude-cli-proxy 3456
+local-llm-proxy 3456
 ```
 
 ## IDE configuration
 
-Point your IDE's custom Anthropic provider at the proxy:
+### Zed
 
-- **Base URL**: `http://127.0.0.1:9099`
-- **API key**: any non-empty string (the proxy ignores it)
-- **Model**: any Claude model name (e.g. `claude-opus-4-6`)
+Settings > AI > General > Configure Providers > OpenAI Compatible API:
 
-Works with any tool that supports `ANTHROPIC_BASE_URL` or a custom Anthropic endpoint — Continue.dev, Cursor, Zed, and others.
+- **API URL**: `http://127.0.0.1:9099/v1`
+- **API Key**: any non-empty string (e.g. `x`)
+- **Model**: `claude-opus-4-6` (or any model name)
+
+### Continue.dev (VS Code / JetBrains)
+
+In `~/.continue/config.json`:
+
+```json
+{
+  "models": [{
+    "provider": "anthropic",
+    "model": "claude-opus-4-6",
+    "apiBase": "http://127.0.0.1:9099",
+    "apiKey": "x"
+  }]
+}
+```
+
+### Cursor
+
+Settings > Models > Anthropic > Override Base URL: `http://127.0.0.1:9099`
+
+### Generic (any tool with ANTHROPIC_BASE_URL)
+
+```bash
+export ANTHROPIC_BASE_URL=http://127.0.0.1:9099
+```
+
+### Generic (any tool with OpenAI-compatible endpoint)
+
+Point the base URL to `http://127.0.0.1:9099/v1` and use any non-empty API key.
 
 ## Endpoints
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/v1/messages` | Anthropic Messages API (streaming and non-streaming) |
-| `GET`  | `/health`       | Health check — returns `{"ok":true}` |
+| Method | Path | Format | Description |
+|--------|------|--------|-------------|
+| `POST` | `/v1/messages` | Anthropic | Messages API (streaming + non-streaming) |
+| `POST` | `/v1/chat/completions` | OpenAI | Chat Completions API (streaming + non-streaming) |
+| `GET`  | `/v1/models` | OpenAI | Lists available models |
+| `GET`  | `/health` | — | Health check — returns `{"ok":true}` |
 
 ## Notes on `--dangerously-skip-permissions`
 
@@ -75,5 +109,5 @@ The proxy passes this flag so the CLI never blocks waiting for a TTY permission 
 To disable Claude's built-in tools entirely (pure chat mode):
 
 ```bash
-CLAUDE_NO_TOOLS=1 claude-cli-proxy
+CLAUDE_NO_TOOLS=1 local-llm-proxy
 ```

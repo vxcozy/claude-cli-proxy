@@ -9,7 +9,7 @@ By default, `claude --print --dangerously-skip-permissions` gives Claude access 
 ## Set the environment variable
 
 ```bash
-CLAUDE_NO_TOOLS=1 claude-cli-proxy
+CLAUDE_NO_TOOLS=1 local-llm-proxy
 ```
 
 This adds `--tools ""` to the CLI invocation, which disables all built-in Claude Code tools.

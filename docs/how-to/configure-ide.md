@@ -1,20 +1,41 @@
 # Configure your IDE
 
-How to point an AI-aware IDE at claude-cli-proxy.
+How to point an AI-aware IDE at local-llm-proxy.
 
-## General setup
+The proxy speaks two protocols:
+- **OpenAI format** (`/v1/chat/completions`) — for Zed and tools with "OpenAI-compatible" settings
+- **Anthropic format** (`/v1/messages`) — for Continue.dev, Cursor, and tools with custom Anthropic endpoints
 
-Any IDE that lets you set a custom Anthropic base URL will work. You need three values:
+## Zed
+
+Zed uses the OpenAI-compatible endpoint. In Settings > AI > General > Configure Providers > OpenAI Compatible API:
 
 | Setting | Value |
 |---------|-------|
-| Base URL | `http://127.0.0.1:9099` |
-| API key | any non-empty string (the proxy ignores it) |
-| Model | any Claude model name (e.g. `claude-opus-4-6`) |
+| API URL | `http://127.0.0.1:9099/v1` |
+| API Key | any non-empty string (e.g. `x`) |
+| Model | `claude-opus-4-6` |
+
+Or in `~/.config/zed/settings.json`:
+
+```json
+{
+  "language_models": {
+    "openai": {
+      "api_url": "http://127.0.0.1:9099/v1",
+      "available_models": [
+        {"name": "claude-opus-4-6", "display_name": "Claude Opus", "max_tokens": 16384}
+      ]
+    }
+  }
+}
+```
+
+Note: this is for Zed's **Agent/Chat** panel, not Edit Predictions (which needs sub-100ms latency and isn't suited for a CLI subprocess proxy).
 
 ## Continue.dev (VS Code / JetBrains)
 
-In your `~/.continue/config.json`:
+Uses the Anthropic endpoint. In your `~/.continue/config.json`:
 
 ```json
 {
@@ -32,28 +53,23 @@ In your `~/.continue/config.json`:
 
 ## Cursor
 
-In Cursor's settings, navigate to *Models* and add a custom model:
+Uses the Anthropic endpoint. In Cursor's settings, navigate to *Models* and add a custom model:
 
 - Provider: Anthropic
 - Base URL: `http://127.0.0.1:9099`
 - API Key: `local`
 
-## Zed
+## Generic (OpenAI-compatible)
 
-In your Zed settings (`~/.config/zed/settings.json`):
+Any tool that supports a custom OpenAI endpoint:
 
-```json
-{
-  "language_models": {
-    "anthropic": {
-      "api_url": "http://127.0.0.1:9099",
-      "api_key": "local"
-    }
-  }
-}
-```
+| Setting | Value |
+|---------|-------|
+| Base URL | `http://127.0.0.1:9099/v1` |
+| API Key | any non-empty string |
+| Model | `claude-opus-4-6` |
 
-## Environment variable
+## Generic (Anthropic-compatible)
 
 Some tools read `ANTHROPIC_BASE_URL` from the environment:
 

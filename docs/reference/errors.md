@@ -1,10 +1,22 @@
 # Error codes
 
-The proxy detects error conditions from the Claude CLI's stderr output and maps them to Anthropic-compatible error responses.
+The proxy detects error conditions from the Claude CLI's stderr output and maps them to API-compatible error responses. Both the Anthropic and OpenAI endpoints return the same HTTP status codes, but use their respective error formats.
+
+## Anthropic error format (`/v1/messages`)
+
+```json
+{"type": "error", "error": {"type": "authentication_error", "message": "..."}}
+```
+
+## OpenAI error format (`/v1/chat/completions`)
+
+```json
+{"error": {"message": "...", "type": "server_error"}}
+```
 
 ## Authentication errors
 
-**Type:** `authentication_error`
+**Anthropic type:** `authentication_error` | **HTTP status:** 401
 
 The Claude CLI is not logged in or the session has expired.
 
@@ -14,7 +26,7 @@ The Claude CLI is not logged in or the session has expired.
 
 ## Rate limit errors
 
-**Type:** `rate_limit_error`
+**Anthropic type:** `rate_limit_error` | **HTTP status:** 429
 
 You've hit your Claude Max usage limit.
 
@@ -24,7 +36,7 @@ You've hit your Claude Max usage limit.
 
 ## Spawn errors
 
-**Type:** `api_error`
+**Anthropic type:** `api_error` | **HTTP status:** 500
 
 The `claude` binary could not be found or failed to start.
 
@@ -32,7 +44,7 @@ The `claude` binary could not be found or failed to start.
 
 ## Exit code errors
 
-**Type:** `api_error`
+**Anthropic type:** `api_error` | **HTTP status:** 500
 
 The Claude CLI subprocess exited with a non-zero code that didn't match auth or rate-limit patterns.
 
@@ -40,6 +52,6 @@ The error message includes the exit code and the first 300 characters of stderr 
 
 ## Request validation errors
 
-**Type:** `invalid_request_error`
+**Anthropic type:** `invalid_request_error` | **HTTP status:** 400
 
-The request body is not valid JSON or is missing the required `messages` array.
+The request body is not valid JSON or is missing the required `messages` array. On the OpenAI endpoint, at least one non-system message is also required.

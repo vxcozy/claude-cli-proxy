@@ -1,6 +1,8 @@
 # API endpoints
 
-## POST /v1/messages
+The proxy speaks two protocols — use whichever your IDE supports.
+
+## POST /v1/messages (Anthropic format)
 
 Anthropic Messages API-compatible endpoint. Accepts the same request format as `api.anthropic.com/v1/messages`.
 
@@ -83,8 +85,6 @@ Errors use the Anthropic error format:
 }
 ```
 
-Error types:
-
 | `error.type` | HTTP status | Meaning |
 |--------------|-------------|---------|
 | `authentication_error` | 401 | Claude CLI not logged in |
@@ -94,6 +94,108 @@ Error types:
 
 In streaming mode, errors are sent as an `error` SSE event before the stream ends.
 
+## POST /v1/chat/completions (OpenAI format)
+
+OpenAI Chat Completions API-compatible endpoint. Use this with Zed, or any tool that supports an OpenAI-compatible provider.
+
+### Request
+
+```
+POST /v1/chat/completions
+Content-Type: application/json
+Authorization: Bearer <any non-empty string>
+```
+
+#### Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `messages` | `Message[]` | yes | Array of conversation messages (must include at least one non-system message) |
+| `model` | `string` | no | Model name. Defaults to `claude-opus-4-6` |
+| `stream` | `boolean` | no | Enable SSE streaming. Default: `false` |
+| `max_tokens` | `number` | no | Accepted but not enforced |
+| `temperature` | `number` | no | Accepted but not enforced |
+
+#### Message format
+
+```json
+{"role": "system", "content": "You are helpful."}
+{"role": "user", "content": "Hello"}
+{"role": "assistant", "content": "Hi there!"}
+```
+
+`system` messages are extracted and passed as the Claude CLI `--system-prompt`. Multiple system messages are concatenated.
+
+### Non-streaming response
+
+```json
+{
+  "id": "chatcmpl-1234567890",
+  "object": "chat.completion",
+  "created": 1234567890,
+  "model": "claude-opus-4-6",
+  "choices": [{
+    "index": 0,
+    "message": {"role": "assistant", "content": "Hi there!"},
+    "finish_reason": "stop"
+  }],
+  "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+}
+```
+
+### Streaming response
+
+When `stream: true`, the response is `text/event-stream` (SSE):
+
+1. Initial chunk with `delta: {"role": "assistant"}`
+2. Content chunks with `delta: {"content": "..."}`  (repeated)
+3. Final chunk with `delta: {}` and `finish_reason: "stop"`
+4. `data: [DONE]` terminator
+
+Each chunk follows the shape:
+
+```json
+{
+  "id": "chatcmpl-1234567890",
+  "object": "chat.completion.chunk",
+  "created": 1234567890,
+  "model": "claude-opus-4-6",
+  "choices": [{"index": 0, "delta": {"content": "text"}, "finish_reason": null}]
+}
+```
+
+### Error responses
+
+Errors use the OpenAI error format:
+
+```json
+{
+  "error": {
+    "message": "Claude CLI is not authenticated.",
+    "type": "server_error"
+  }
+}
+```
+
+HTTP status codes are the same as the Anthropic endpoint (401, 429, 500, 400).
+
+## GET /v1/models
+
+Lists available models. Useful for IDEs that query the model list on startup.
+
+### Response
+
+```json
+{
+  "object": "list",
+  "data": [
+    {"id": "claude-opus-4-6", "object": "model", "created": 0, "owned_by": "anthropic"},
+    {"id": "claude-sonnet-4-6", "object": "model", "created": 0, "owned_by": "anthropic"},
+    {"id": "claude-haiku-4-5", "object": "model", "created": 0, "owned_by": "anthropic"}
+  ]
+}
+```
+
 ## GET /health
 
 Health check endpoint.
@@ -101,7 +203,7 @@ Health check endpoint.
 ### Response
 
 ```json
-{"ok": true, "proxy": "claude-cli-proxy"}
+{"ok": true, "proxy": "local-llm-proxy"}
 ```
 
 ## CORS

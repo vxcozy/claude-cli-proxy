@@ -8,7 +8,7 @@ Meanwhile, the Anthropic API is a separate product with its own billing. If you 
 
 ## The solution
 
-claude-cli-proxy bridges the gap. It speaks the Anthropic Messages API on one side and delegates to the official `claude` CLI on the other. The IDE thinks it's talking to an API, but the actual inference runs through your Max subscription.
+local-llm-proxy bridges the gap. It speaks the Anthropic Messages API on one side and delegates to the official `claude` CLI on the other. The IDE thinks it's talking to an API, but the actual inference runs through your Max subscription.
 
 ## Alternatives considered
 

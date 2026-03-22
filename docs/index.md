@@ -1,6 +1,6 @@
-# claude-cli-proxy docs
+# local-llm-proxy docs
 
-A local Anthropic-compatible API proxy that delegates to the `claude` CLI.
+A local API proxy that delegates to the `claude` CLI. Speaks both Anthropic (`/v1/messages`) and OpenAI (`/v1/chat/completions`) formats.
 
 ## Tutorials
 
@@ -12,7 +12,7 @@ Step-by-step lessons to get started.
 
 Solve specific problems.
 
-- [Configure your IDE](how-to/configure-ide.md) — point Continue.dev, Cursor, Zed, or other IDEs at the proxy
+- [Configure your IDE](how-to/configure-ide.md) — point Zed, Continue.dev, Cursor, or other IDEs at the proxy
 - [Run as a background service](how-to/background-service.md) — keep the proxy running with launchd or systemd
 - [Disable built-in tools](how-to/disable-tools.md) — run in pure chat mode
 
@@ -20,7 +20,7 @@ Solve specific problems.
 
 Technical details and specifications.
 
-- [API endpoints](reference/api.md) — request/response format for `/v1/messages` and `/health`
+- [API endpoints](reference/api.md) — Anthropic `/v1/messages`, OpenAI `/v1/chat/completions`, `/v1/models`, `/health`
 - [CLI options](reference/cli.md) — command-line arguments and environment variables
 - [Error codes](reference/errors.md) — error types and what they mean
 

@@ -1,15 +1,16 @@
 {
-  "name": "claude-cli-proxy",
+  "name": "local-llm-proxy",
   "version": "0.1.0",
   "description": "Local Anthropic-compatible API proxy that delegates to the Claude CLI — use your Claude Max subscription in any AI-aware IDE",
   "type": "module",
   "bin": {
-    "claude-cli-proxy": "./dist/index.js"
+    "local-llm-proxy": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "node --import tsx --test test/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",

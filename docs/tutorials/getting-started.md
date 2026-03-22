@@ -1,6 +1,6 @@
 # Getting started
 
-This tutorial walks you through installing claude-cli-proxy, verifying it works, and sending your first request.
+This tutorial walks you through installing local-llm-proxy, verifying it works, and sending your first request.
 
 ## Prerequisites
 
@@ -14,26 +14,31 @@ If the Claude CLI isn't authenticated yet, run `claude` in your terminal and use
 ## Install the proxy
 
 ```bash
-npm install -g claude-cli-proxy
+npm install -g local-llm-proxy
 ```
 
 Or if you prefer not to install globally:
 
 ```bash
-npx claude-cli-proxy
+npx local-llm-proxy
 ```
 
 ## Start the proxy
 
 ```bash
-claude-cli-proxy
+local-llm-proxy
 ```
 
 You should see:
 
 ```
-claude-cli-proxy  →  http://127.0.0.1:9099
-Set ANTHROPIC_BASE_URL=http://127.0.0.1:9099 in your IDE
+local-llm-proxy  →  http://127.0.0.1:9099
+
+Endpoints:
+  Anthropic  POST /v1/messages          (Continue.dev, Cursor)
+  OpenAI     POST /v1/chat/completions  (Zed, generic OpenAI clients)
+  Models     GET  /v1/models
+  Health     GET  /health
 ```
 
 ## Verify it's running
@@ -47,10 +52,10 @@ curl http://127.0.0.1:9099/health
 Expected output:
 
 ```json
-{"ok":true,"proxy":"claude-cli-proxy"}
+{"ok":true,"proxy":"local-llm-proxy"}
 ```
 
-## Send your first request
+## Send your first request (Anthropic format)
 
 ```bash
 curl -X POST http://127.0.0.1:9099/v1/messages \
@@ -64,6 +69,21 @@ curl -X POST http://127.0.0.1:9099/v1/messages \
 ```
 
 You should get back a JSON response with Claude's reply in `content[0].text`.
+
+## Send your first request (OpenAI format)
+
+```bash
+curl -X POST http://127.0.0.1:9099/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer any-string" \
+  -d '{
+    "model": "claude-opus-4-6",
+    "messages": [{"role": "user", "content": "Hello!"}],
+    "stream": false
+  }'
+```
+
+You should get back a JSON response with Claude's reply in `choices[0].message.content`.
 
 ## Next steps
 
