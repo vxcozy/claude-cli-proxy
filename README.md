@@ -30,8 +30,6 @@ The proxy never touches your OAuth token directly — it delegates to the offici
 
 ```bash
 npm install -g local-llm-proxy
-# or run directly:
-npx local-llm-proxy
 ```
 
 Or from source:
@@ -41,16 +39,18 @@ git clone https://github.com/vxcozy/local-llm-proxy
 cd local-llm-proxy
 npm install
 npm run build
-npm start
 ```
 
 ## Usage
 
 ```bash
-# Start on default port 9099
+# If installed globally:
 local-llm-proxy
 
-# Start on a custom port
+# If running from source:
+npm start
+
+# Custom port (default is 9099):
 local-llm-proxy 3456
 ```
 
@@ -58,11 +58,24 @@ local-llm-proxy 3456
 
 ### Zed
 
-Settings > AI > General > Configure Providers > OpenAI Compatible API:
+Add this to your `~/.config/zed/settings.json` (inside the top-level object):
 
-- **API URL**: `http://127.0.0.1:9099/v1`
-- **API Key**: any non-empty string (e.g. `x`)
-- **Model**: `claude-opus-4-6` (or any model name)
+```json
+"language_models": {
+  "openai": {
+    "api_url": "http://127.0.0.1:9099/v1",
+    "available_models": [
+      {
+        "name": "claude-opus-4-6",
+        "display_name": "Claude Opus (local proxy)",
+        "max_tokens": 16384
+      }
+    ]
+  }
+}
+```
+
+When Zed prompts for an OpenAI API key, enter any non-empty string (e.g. `x`). Then select **Claude Opus (local proxy)** from the model dropdown in the Assistant panel.
 
 ### Continue.dev (VS Code / JetBrains)
 
@@ -102,12 +115,16 @@ Point the base URL to `http://127.0.0.1:9099/v1` and use any non-empty API key.
 | `GET`  | `/v1/models` | OpenAI | Lists available models |
 | `GET`  | `/health` | — | Health check — returns `{"ok":true}` |
 
+## Environment variables
+
+| Variable | Description |
+|----------|-------------|
+| `CLAUDE_NO_TOOLS` | Set to `1` to disable Claude's built-in coding tools (pure chat mode) |
+
 ## Notes on `--dangerously-skip-permissions`
 
-The proxy passes this flag so the CLI never blocks waiting for a TTY permission prompt (there is no TTY — it's a background process). Claude's native tools (Bash, file read/write) remain available and are governed by your normal Claude Max permissions.
+The proxy passes this flag so the CLI never blocks waiting for a TTY permission prompt (there is no TTY). Claude's native tools (Bash, file read/write) remain available and are governed by your normal Claude Max permissions.
 
-To disable Claude's built-in tools entirely (pure chat mode):
+## License
 
-```bash
-CLAUDE_NO_TOOLS=1 local-llm-proxy
-```
+MIT

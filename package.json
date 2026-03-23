@@ -1,16 +1,37 @@
 {
   "name": "local-llm-proxy",
   "version": "0.1.0",
-  "description": "Local Anthropic-compatible API proxy that delegates to the Claude CLI — use your Claude Max subscription in any AI-aware IDE",
+  "description": "Local API proxy that delegates to the Claude CLI — use your Claude Max subscription in any AI-aware IDE",
   "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vxcozy/local-llm-proxy"
+  },
+  "keywords": [
+    "claude",
+    "proxy",
+    "openai",
+    "anthropic",
+    "ide",
+    "zed",
+    "cursor",
+    "continue"
+  ],
   "bin": {
     "local-llm-proxy": "./dist/index.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
-    "test": "node --import tsx --test test/*.test.ts"
+    "test": "node --import tsx --test test/*.test.ts",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
