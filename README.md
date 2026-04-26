@@ -66,7 +66,7 @@ Add this to your `~/.config/zed/settings.json` (inside the top-level object):
     "api_url": "http://127.0.0.1:9099/v1",
     "available_models": [
       {
-        "name": "claude-opus-4-6",
+        "name": "claude-opus-4-7",
         "display_name": "Claude Opus (local proxy)",
         "max_tokens": 16384
       }
@@ -85,7 +85,7 @@ In `~/.continue/config.json`:
 {
   "models": [{
     "provider": "anthropic",
-    "model": "claude-opus-4-6",
+    "model": "claude-opus-4-7",
     "apiBase": "http://127.0.0.1:9099",
     "apiKey": "x"
   }]

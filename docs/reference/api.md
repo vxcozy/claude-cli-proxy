@@ -19,7 +19,7 @@ x-api-key: <any non-empty string>
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `messages` | `Message[]` | yes | Array of conversation messages |
-| `model` | `string` | no | Model name passed to `claude --model`. Defaults to `claude-opus-4-6` in response metadata |
+| `model` | `string` | no | Model name passed to `claude --model`. Defaults to `claude-opus-4-7` in response metadata |
 | `system` | `string` | no | System prompt passed via `--system-prompt` |
 | `stream` | `boolean` | no | Enable SSE streaming. Default: `false` |
 | `max_tokens` | `number` | no | Accepted but not enforced (CLI manages its own limits) |
@@ -50,7 +50,7 @@ x-api-key: <any non-empty string>
   "type": "message",
   "role": "assistant",
   "content": [{"type": "text", "text": "Hi there!"}],
-  "model": "claude-opus-4-6",
+  "model": "claude-opus-4-7",
   "stop_reason": "end_turn",
   "stop_sequence": null,
   "usage": {"input_tokens": 0, "output_tokens": 0}
@@ -111,7 +111,7 @@ Authorization: Bearer <any non-empty string>
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `messages` | `Message[]` | yes | Array of conversation messages (must include at least one non-system message) |
-| `model` | `string` | no | Model name. Defaults to `claude-opus-4-6` |
+| `model` | `string` | no | Model name. Defaults to `claude-opus-4-7` |
 | `stream` | `boolean` | no | Enable SSE streaming. Default: `false` |
 | `max_tokens` | `number` | no | Accepted but not enforced |
 | `temperature` | `number` | no | Accepted but not enforced |
@@ -133,7 +133,7 @@ Authorization: Bearer <any non-empty string>
   "id": "chatcmpl-1234567890",
   "object": "chat.completion",
   "created": 1234567890,
-  "model": "claude-opus-4-6",
+  "model": "claude-opus-4-7",
   "choices": [{
     "index": 0,
     "message": {"role": "assistant", "content": "Hi there!"},
@@ -159,7 +159,7 @@ Each chunk follows the shape:
   "id": "chatcmpl-1234567890",
   "object": "chat.completion.chunk",
   "created": 1234567890,
-  "model": "claude-opus-4-6",
+  "model": "claude-opus-4-7",
   "choices": [{"index": 0, "delta": {"content": "text"}, "finish_reason": null}]
 }
 ```
@@ -189,7 +189,7 @@ Lists available models. Useful for IDEs that query the model list on startup.
 {
   "object": "list",
   "data": [
-    {"id": "claude-opus-4-6", "object": "model", "created": 0, "owned_by": "anthropic"},
+    {"id": "claude-opus-4-7", "object": "model", "created": 0, "owned_by": "anthropic"},
     {"id": "claude-sonnet-4-6", "object": "model", "created": 0, "owned_by": "anthropic"},
     {"id": "claude-haiku-4-5", "object": "model", "created": 0, "owned_by": "anthropic"}
   ]
