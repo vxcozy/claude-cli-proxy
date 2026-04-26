@@ -63,7 +63,7 @@ async function handleMessages(req: IncomingMessage, res: ServerResponse): Promis
   const prompt = buildPrompt(parsed.messages);
   const streaming = parsed.stream ?? false;
   const msgId = `msg_${Date.now()}`;
-  const model = parsed.model ?? 'claude-opus-4-6';
+  const model = parsed.model ?? 'claude-opus-4-7';
 
   const abortController = new AbortController();
   req.on('close', () => abortController.abort());
@@ -225,7 +225,7 @@ async function handleChatCompletions(req: IncomingMessage, res: ServerResponse):
   const prompt = buildPrompt(anthropicMessages);
   const streaming = parsed.stream ?? false;
   const chatId = `chatcmpl-${Date.now()}`;
-  const model = parsed.model ?? 'claude-opus-4-6';
+  const model = parsed.model ?? 'claude-opus-4-7';
   const created = Math.floor(Date.now() / 1000);
 
   const abortController = new AbortController();
@@ -329,7 +329,7 @@ async function handleChatCompletions(req: IncomingMessage, res: ServerResponse):
 
 function handleModels(_req: IncomingMessage, res: ServerResponse): void {
   const models = [
-    'claude-opus-4-6',
+    'claude-opus-4-7',
     'claude-sonnet-4-6',
     'claude-haiku-4-5',
   ];

@@ -62,7 +62,7 @@ curl -X POST http://127.0.0.1:9099/v1/messages \
   -H "Content-Type: application/json" \
   -H "x-api-key: any-string" \
   -d '{
-    "model": "claude-opus-4-6",
+    "model": "claude-opus-4-7",
     "messages": [{"role": "user", "content": "Hello!"}],
     "stream": false
   }'
@@ -77,7 +77,7 @@ curl -X POST http://127.0.0.1:9099/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer any-string" \
   -d '{
-    "model": "claude-opus-4-6",
+    "model": "claude-opus-4-7",
     "messages": [{"role": "user", "content": "Hello!"}],
     "stream": false
   }'

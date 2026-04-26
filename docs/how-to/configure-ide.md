@@ -14,7 +14,7 @@ Zed uses the OpenAI-compatible endpoint. In Settings > AI > General > Configure 
 |---------|-------|
 | API URL | `http://127.0.0.1:9099/v1` |
 | API Key | any non-empty string (e.g. `x`) |
-| Model | `claude-opus-4-6` |
+| Model | `claude-opus-4-7` |
 
 Or in `~/.config/zed/settings.json`:
 
@@ -24,7 +24,7 @@ Or in `~/.config/zed/settings.json`:
     "openai": {
       "api_url": "http://127.0.0.1:9099/v1",
       "available_models": [
-        {"name": "claude-opus-4-6", "display_name": "Claude Opus", "max_tokens": 16384}
+        {"name": "claude-opus-4-7", "display_name": "Claude Opus", "max_tokens": 16384}
       ]
     }
   }
@@ -43,7 +43,7 @@ Uses the Anthropic endpoint. In your `~/.continue/config.json`:
     {
       "title": "Claude (local proxy)",
       "provider": "anthropic",
-      "model": "claude-opus-4-6",
+      "model": "claude-opus-4-7",
       "apiBase": "http://127.0.0.1:9099",
       "apiKey": "local"
     }
@@ -67,7 +67,7 @@ Any tool that supports a custom OpenAI endpoint:
 |---------|-------|
 | Base URL | `http://127.0.0.1:9099/v1` |
 | API Key | any non-empty string |
-| Model | `claude-opus-4-6` |
+| Model | `claude-opus-4-7` |
 
 ## Generic (Anthropic-compatible)
 
